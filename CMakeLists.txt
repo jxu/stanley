@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 project(cchess C)
 
+# Export compiler commands for clangd
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Set source and test directories
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 set(TEST_DIR "${CMAKE_SOURCE_DIR}/tests")
@@ -21,4 +24,5 @@ add_executable(app ${MAIN_FILE} ${SRC_FILES})
 # Add executable for tests
 add_executable(test_app ${SRC_FILES} ${TEST_FILES})
 target_include_directories(test_app PRIVATE src tests)
+
 
