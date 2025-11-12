@@ -53,11 +53,12 @@ typedef struct
 // Global position for incremental updates
 // https://www.chessprogramming.org/Incremental_Updates
 
-position global_pos;
+extern position global_pos;
 
 
 // Read fen is null-terminated FEN string
 void position_from_fen(const char* fen);
 
 
-char START_FEN[] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+static const char START_FEN[] = 
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";

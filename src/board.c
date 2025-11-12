@@ -29,6 +29,8 @@
 #include "common.h"
 #include "board.h"
 
+// global position
+position global_pos;
 
 void position_from_fen(const char* fen)
 {   
@@ -74,7 +76,7 @@ void position_from_fen(const char* fen)
             }
             else // piece given by letter
             {
-                piece p;
+                piece p = EMPTY;
                 bool is_black = islower(c);
                 c = toupper(c);
 
