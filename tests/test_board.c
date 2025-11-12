@@ -1,3 +1,7 @@
+#include <assert.h>
 #include "board.h"
 
-int main(void) {}
+void test_board(void) 
+{
+    assert(0);
+}
