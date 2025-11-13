@@ -20,9 +20,11 @@ list(REMOVE_ITEM SRC_FILES ${MAIN_FILE})
 
 # Add executable for main application
 add_executable(app ${MAIN_FILE} ${SRC_FILES})
+target_compile_options(app PRIVATE -O3 -Wall -Wextra)
 
 # Add executable for tests
 add_executable(test_app ${SRC_FILES} ${TEST_FILES})
 target_include_directories(test_app PRIVATE src tests)
+target_compile_options(test_app PRIVATE -Og -g -Wall -Wextra)
 
 

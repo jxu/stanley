@@ -42,8 +42,8 @@ void position_from_fen(const char* fen)
     // https://www.chessprogramming.org/Forsyth-Edwards_Notation
     char place_buf[128];
     char side;
-    char castling[5];
-    char ep_target[3];
+    char castling[5]; // 4 chars + 1 NUL
+    char ep_target[3]; // 2 chars + 1 NUL
     int  halfmove;
     int  fullmove;
 
