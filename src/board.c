@@ -30,7 +30,7 @@
 #include "board.h"
 
 // global position
-position global_pos;
+Position global_pos;
 
 void position_from_fen(const char* fen)
 {   
@@ -82,18 +82,12 @@ void position_from_fen(const char* fen)
 
                 switch (c)
                 {
-                    case 'P':
-                        p = PAWN; break;
-                    case 'N':
-                        p = KNIGHT; break;
-                    case 'B':
-                        p = BISHOP; break;
-                    case 'R':
-                        p = ROOK; break;
-                    case 'Q':
-                        p = QUEEN; break;
-                    case 'K':
-                        p = KING; break;
+                    case 'P': p = PAWN; break;
+                    case 'N': p = KNIGHT; break;
+                    case 'B': p = BISHOP; break;
+                    case 'R': p = ROOK; break;
+                    case 'Q': p = QUEEN; break;
+                    case 'K': p = KING; break;
                         
                     default:
                         DEBUG_PRINT("unrecognized piece %c\n", c);
@@ -137,6 +131,24 @@ void position_from_fen(const char* fen)
 
     // castling rights (default none)
     // - or letters in KQkq
+    global_pos.castle_flags = 0;
+
+    if (castling[0] != '-')
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            switch(castling[i])
+            {
+                case 'K': global_pos.castle_flags |= CASTLE_WK; break; 
+                case 'Q': global_pos.castle_flags |= CASTLE_WQ; break;
+                case 'k': global_pos.castle_flags |= CASTLE_BK; break;
+                case 'q': global_pos.castle_flags |= CASTLE_BQ; break;
+                default: DEBUG_PRINT("bad castling flag");
+            }
+        }
+
+    }
+
 
 }
 

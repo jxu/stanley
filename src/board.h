@@ -65,15 +65,15 @@ typedef struct
     piece board[BOARD_SIZE];
     bool black_to_move;
     uchar castle_flags; // TODO
-    square en_passant_target;
+    square ep_target; // 0xFF to store none
     int halfmove;
     int fullmove;
-} position;
+} Position;
 
 // Global position for incremental updates
 // https://www.chessprogramming.org/Incremental_Updates
 
-extern position global_pos;
+extern Position global_pos;
 
 
 // Read fen is null-terminated FEN string
