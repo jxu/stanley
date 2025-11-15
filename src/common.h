@@ -15,5 +15,6 @@ typedef unsigned char uchar;
 #define DEBUG_PRINT(...) do{ } while ( 0 )
 #endif
 
-
+// print error message and quit (not dependent on NDEBUG)
+#define ERROR(...) { fprintf(stderr, __VA_ARGS__); exit(1); }
 

@@ -29,7 +29,6 @@ void test_board(void)
     position_from_fen(START_FEN);
 
     // Starting board, by increasing row
-    // TODO: cleanup formatting
     piece START_BOARD[8][8] =
     {{ ROOK, KNIGHT, BISHOP, QUEEN, KING, BISHOP, KNIGHT, ROOK},
      { [0 ... 7] = PAWN },

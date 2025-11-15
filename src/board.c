@@ -54,7 +54,7 @@ void position_from_fen(const char* fen)
 
     if (ret != 6)
     {
-        DEBUG_PRINT("Error: only read %d FEN fields\n", ret);
+        ERROR("only read %d FEN fields\n", ret);
     }
 
     // piece placement reads place ranks 8 through 1
@@ -88,7 +88,7 @@ void position_from_fen(const char* fen)
                     case 'K': p = KING; break;
                         
                     default:
-                        DEBUG_PRINT("unrecognized piece %c\n", c);
+                        ERROR("unrecognized piece %c\n", c);
                 }
 
                 int ind = get_sq(row, col);
@@ -118,7 +118,7 @@ void position_from_fen(const char* fen)
     else if (side == 'b')
         global_pos.black_to_move = true;
     else
-        DEBUG_PRINT("bad side to move\n");
+        ERROR("bad side to move\n");
 
     // castling rights (default none)
     // - or letters in KQkq
@@ -134,7 +134,7 @@ void position_from_fen(const char* fen)
                 case 'Q': global_pos.castle_flags |= CASTLE_WQ; break;
                 case 'k': global_pos.castle_flags |= CASTLE_BK; break;
                 case 'q': global_pos.castle_flags |= CASTLE_BQ; break;
-                default: DEBUG_PRINT("bad castling flag");
+                default: ERROR("bad castling flag");
             }
         }
     }
