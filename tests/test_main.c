@@ -1,10 +1,15 @@
-#include "stdio.h"
+#include "unity.h"
+
+// unity functions
+void setUp(void) {}
+void tearDown(void) {}
+
 
 void test_board();
 
-int main()
+int main(void)
 {
-    test_board();
-    printf("All tests passed!\n");
-    return 0;
+    UNITY_BEGIN();
+    RUN_TEST(test_board);
+    return UNITY_END();
 }
