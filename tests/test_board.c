@@ -30,18 +30,18 @@ void test_board(void)
 
     // Starting board, by increasing row
     // TODO: cleanup formatting
-    const piece START_BOARD[8][8] =
-    {{   ROOK, KNIGHT, BISHOP, QUEEN, KING, BISHOP, KNIGHT, ROOK},
-     {   PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN},
-     {  EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-     {  EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-     {  EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-     {  EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-     {  -PAWN,-PAWN,-PAWN,-PAWN,-PAWN,-PAWN,-PAWN,-PAWN},
-     {  -ROOK,-KNIGHT,-BISHOP,-QUEEN,-KING,-BISHOP,-KNIGHT,-ROOK},
+    piece START_BOARD[8][8] =
+    {{ ROOK, KNIGHT, BISHOP, QUEEN, KING, BISHOP, KNIGHT, ROOK},
+     { [0 ... 7] = PAWN },
+     { [0 ... 7] = EMPTY },
+     { [0 ... 7] = EMPTY },
+     { [0 ... 7] = EMPTY },
+     { [0 ... 7] = EMPTY },
+     { [0 ... 7] = -PAWN },
+     {-ROOK,-KNIGHT,-BISHOP,-QUEEN,-KING,-BISHOP,-KNIGHT,-ROOK},
     };
 
-    for (int r = 0; r < 1; ++r)
+    for (int r = 0; r < 8; ++r)
     {
         for (int c = 0; c < 8; ++c)
         {
@@ -51,10 +51,12 @@ void test_board(void)
     }
 
     assert(global_pos.black_to_move == false);
-    // TODO: castling
-    //assert(global_pos.ep_target == 0xFF);
-    //assert(global_pos.halfmove == 0);
-    //assert(global_pos.fullmove == 1);
+
+    const uchar CASTLE_ALL = CASTLE_WK | CASTLE_WQ | CASTLE_BK | CASTLE_BQ;
+    assert(global_pos.castle_flags == CASTLE_ALL);
+    assert(global_pos.ep_target == NO_EP_TARGET);
+    assert(global_pos.halfmove == 0);
+    assert(global_pos.fullmove == 1);
 
 
     printf("Test board passed\n");

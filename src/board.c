@@ -42,8 +42,8 @@ void position_from_fen(const char* fen)
     // https://www.chessprogramming.org/Forsyth-Edwards_Notation
     char place_buf[128];
     char side;
-    char castling[5]; // 4 chars + 1 NUL
-    char ep_target[3]; // 2 chars + 1 NUL
+    char castling[5]; // at most "KQkq\0"
+    char ep_target[3]; // at most "e3\0"
     int  halfmove;
     int  fullmove;
 
@@ -70,14 +70,12 @@ void position_from_fen(const char* fen)
 
             // digit of empty squares to skip
             if ('1' <= c && c <= '8')
-            {
                 col += c - '0';
-
-            }
+            
             else // piece given by letter
             {
                 piece p = EMPTY;
-                bool is_black = islower(c);
+                bool black = islower(c);
                 c = toupper(c);
 
                 switch (c)
@@ -91,32 +89,25 @@ void position_from_fen(const char* fen)
                         
                     default:
                         DEBUG_PRINT("unrecognized piece %c\n", c);
-                        
                 }
 
                 int ind = get_sq(row, col);
 
                 // write piece to board, including color
-                global_pos.board[ind] = is_black ? -p: p;
+                global_pos.board[ind] = black ? -p: p;
 
                 ++col; // move to next square
-                
             }
-            
-
         }
         
         assert(col == 8);
 
         // expect / separator (if not first rank)
-
         if (row > 0)
         {
-            char c = *s++;
-            assert(c == '/');
-            
+            assert(*s == '/');
+            ++s;
         }
-        
     }
 
     // read remaining info
@@ -146,12 +137,23 @@ void position_from_fen(const char* fen)
                 default: DEBUG_PRINT("bad castling flag");
             }
         }
-
     }
 
+    // ep target
+    if (ep_target[0] == '-')
+    {
+        global_pos.ep_target = NO_EP_TARGET;
+    } 
+    else
+    {
+        global_pos.ep_target = sq_from_coord(ep_target);
+        int row = sq_row(global_pos.ep_target);
+        assert(row == 2 || row == 5); // only 3rd and 6th ranks
+    }
+
+    global_pos.halfmove = halfmove;
+    global_pos.fullmove = fullmove;
 
 }
-
-
 
 

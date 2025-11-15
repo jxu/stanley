@@ -70,6 +70,8 @@ typedef struct
     int fullmove;
 } Position;
 
+static const square NO_EP_TARGET = -1;
+
 // Global position for incremental updates
 // https://www.chessprogramming.org/Incremental_Updates
 
