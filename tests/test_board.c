@@ -29,7 +29,7 @@ void test_board(void)
     position_from_fen(START_FEN);
 
     // Starting board, by increasing row
-    piece START_BOARD[8][8] =
+    piece BOARD[8][8] =
     {{ ROOK, KNIGHT, BISHOP, QUEEN, KING, BISHOP, KNIGHT, ROOK},
      { [0 ... 7] = PAWN },
      { [0 ... 7] = EMPTY },
@@ -45,7 +45,7 @@ void test_board(void)
         for (int c = 0; c < 8; ++c)
         {
             piece p = global_pos.board[get_sq(r,c)];
-            assert(p == START_BOARD[r][c]);
+            assert(p == BOARD[r][c]);
         }
     }
 
@@ -57,6 +57,27 @@ void test_board(void)
     assert(global_pos.halfmove == 0);
     assert(global_pos.fullmove == 1);
 
+    // Black to move position after 1. e4
+    const char FEN1[] = 
+        "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
+    
+    position_from_fen(FEN1);
+    
+    BOARD[1][4] = EMPTY;
+    BOARD[3][4] = PAWN;
+
+    for (int r = 0; r < 8; ++r)
+    {
+        for (int c = 0; c < 8; ++c)
+        {
+            assert(global_pos.board[get_sq(r,c)] == BOARD[r][c]);
+        }
+    }
+    assert(global_pos.black_to_move == true);
+    assert(global_pos.castle_flags == CASTLE_ALL);
+    assert(global_pos.ep_target == sq_from_coord("e3"));
+    assert(global_pos.halfmove == 0);
+    assert(global_pos.fullmove == 1);
 
     printf("Test board passed\n");
 }
