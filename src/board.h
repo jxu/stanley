@@ -3,20 +3,50 @@
 #include "common.h"
 
 // slight type abstraction
-typedef int piece; 
 typedef unsigned char square;
 
-enum piece_type
+typedef enum
 {
-    EMPTY  = 0,
-    PAWN   = 1,
-    KNIGHT = 2,
-    BISHOP = 3,
-    ROOK   = 4,
-    QUEEN  = 5,
-    KING   = 6,
-};
-// black will be represented by negative
+    NIL     = 0,
+    PAWN    = 1,
+    KNIGHT  = 2,
+    BISHOP  = 3,
+    ROOK    = 4,
+    QUEEN   = 5,
+    KING    = 6,
+} PieceType;
+
+// Piece type (3 bits) and color (1 bit)
+typedef enum
+{
+    EMPTY   = NIL,
+    WPAWN   = PAWN,
+    WKNIGHT = KNIGHT,
+    WBISHOP = BISHOP,
+    WROOK   = ROOK,
+    WQUEEN  = QUEEN,
+    WKING   = KING,
+
+    BCODE   = 8,
+    BPAWN   = BCODE + PAWN,
+    BKNIGHT = BCODE + KNIGHT,
+    BBISHOP = BCODE + BISHOP,
+    BROOK   = BCODE + ROOK,
+    BQUEEN  = BCODE + QUEEN,
+    BKING   = BCODE + KING,
+} PieceCode;
+
+// Note empty needs to be checked separately
+typedef enum
+{
+    WHITE = 0,
+    BLACK = 8,
+} Color;
+
+
+// note EMPTY must be checked separately
+static inline int get_color(PieceCode p) {return p & 8;}
+
 
 // 0x88 board size
 #define BOARD_SIZE 128
@@ -26,23 +56,20 @@ enum piece_type
 // rows 0-7 encodes ranks 1-8
 // cols 0-7 encodes files a-h
 
-static inline bool is_black(piece s) {return s < 0;}
-
 static inline bool is_sq(square s) {return (s & 0x88) == 0;}
-static inline square get_sq(int row, int col) {return (row << 4) + (col);}
+static inline square get_sq(int row, int col) {return (row << 4) + col;}
 static inline int sq_col(square s) {return s & 7;}
 static inline int sq_row(square s) {return s >> 4;}
 
 // Check if string is valid algebraic coordinate
 static inline bool is_coord_valid(const char* s)
 {
-    assert(s != NULL);
-    return (strlen(s) == 2 && 
-            'a' <= s[0] && s[0] <= 'h' &&
-            '1' <= s[1] && s[1] <= '8');
+    return ('a' <= s[0] && s[0] <= 'h' &&
+            '1' <= s[1] && s[1] <= '8' &&
+            s[2] == '\0');
 }
 
-static inline int sq_from_coord(const char* coord)
+static inline square sq_from_coord(const char* coord)
 {
     assert(is_coord_valid(coord));
     int row = coord[1] - '1';
@@ -62,7 +89,7 @@ enum castling_flags
 // Similar to FEN
 typedef struct
 {
-    piece board[BOARD_SIZE];
+    PieceCode board[BOARD_SIZE];
     bool black_to_move;
     uchar castle_flags; // TODO
     square ep_target; // 0xFF to store none

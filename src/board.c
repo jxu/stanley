@@ -74,18 +74,18 @@ void position_from_fen(const char* fen)
             
             else // piece given by letter
             {
-                piece p = EMPTY;
-                bool black = islower(c);
-                c = toupper(c);
+                PieceCode p = EMPTY;
+                bool black = islower(c); // lowercase letter = black
+                c = toupper(c); // consider uppercase for below
 
                 switch (c)
                 {
-                    case 'P': p = PAWN; break;
-                    case 'N': p = KNIGHT; break;
-                    case 'B': p = BISHOP; break;
-                    case 'R': p = ROOK; break;
-                    case 'Q': p = QUEEN; break;
-                    case 'K': p = KING; break;
+                    case 'P': p = WPAWN; break;
+                    case 'N': p = WKNIGHT; break;
+                    case 'B': p = WBISHOP; break;
+                    case 'R': p = WROOK; break;
+                    case 'Q': p = WQUEEN; break;
+                    case 'K': p = WKING; break;
                         
                     default:
                         ERROR("unrecognized piece %c\n", c);
@@ -94,7 +94,7 @@ void position_from_fen(const char* fen)
                 int ind = get_sq(row, col);
 
                 // write piece to board, including color
-                global_pos.board[ind] = black ? -p: p;
+                global_pos.board[ind] = black ? p + BLACK: p;
 
                 ++col; // move to next square
             }
@@ -153,7 +153,5 @@ void position_from_fen(const char* fen)
 
     global_pos.halfmove = halfmove;
     global_pos.fullmove = fullmove;
-
 }
-
 

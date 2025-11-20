@@ -4,8 +4,8 @@
 
 void test_board(void) 
 {
-    assert(is_black(-KING));
-    assert(!is_black(KNIGHT));
+    assert(get_color(WKING) == WHITE);
+    assert(get_color(BKNIGHT) == BLACK);
 
     assert(get_sq(1, 2) == 0x12);
 
@@ -29,22 +29,22 @@ void test_board(void)
     position_from_fen(START_FEN);
 
     // Starting board, by increasing row
-    piece BOARD[8][8] =
-    {{ ROOK, KNIGHT, BISHOP, QUEEN, KING, BISHOP, KNIGHT, ROOK},
-     { [0 ... 7] = PAWN },
+    PieceCode BOARD[8][8] =
+    {{ WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK},
+     { [0 ... 7] = WPAWN },
      { [0 ... 7] = EMPTY },
      { [0 ... 7] = EMPTY },
      { [0 ... 7] = EMPTY },
      { [0 ... 7] = EMPTY },
-     { [0 ... 7] = -PAWN },
-     {-ROOK,-KNIGHT,-BISHOP,-QUEEN,-KING,-BISHOP,-KNIGHT,-ROOK},
+     { [0 ... 7] = BPAWN },
+     {BROOK,BKNIGHT,BBISHOP,BQUEEN,BKING,BBISHOP,BKNIGHT,BROOK},
     };
 
     for (int r = 0; r < 8; ++r)
     {
         for (int c = 0; c < 8; ++c)
         {
-            piece p = global_pos.board[get_sq(r,c)];
+            PieceCode p = global_pos.board[get_sq(r,c)];
             assert(p == BOARD[r][c]);
         }
     }
@@ -64,7 +64,7 @@ void test_board(void)
     position_from_fen(FEN1);
     
     BOARD[1][4] = EMPTY;
-    BOARD[3][4] = PAWN;
+    BOARD[3][4] = WPAWN;
 
     for (int r = 0; r < 8; ++r)
     {
