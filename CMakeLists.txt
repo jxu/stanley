@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(cchess C)
+project(cchess CXX)
 
 # Export compiler commands for clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -11,11 +11,11 @@ set(TEST_DIR "${CMAKE_SOURCE_DIR}/tests")
 include_directories(SRC_DIR)
 
 # Collect all source files
-file(GLOB SRC_FILES "${SRC_DIR}/*.c")
-file(GLOB TEST_FILES "${TEST_DIR}/*.c")
+file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
+file(GLOB TEST_FILES "${TEST_DIR}/*.cpp")
 
 # Separate main.c from other sources
-set(MAIN_FILE "${SRC_DIR}/main.c")
+set(MAIN_FILE "${SRC_DIR}/main.cpp")
 list(REMOVE_ITEM SRC_FILES ${MAIN_FILE})
 
 # Add executable for main application

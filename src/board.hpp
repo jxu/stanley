@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common.h"
+#include "common.hpp"
 
 // slight type abstraction
 typedef unsigned char square;

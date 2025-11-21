@@ -26,8 +26,8 @@
 
 */
 
-#include "common.h"
-#include "board.h"
+#include "common.hpp"
+#include "board.hpp"
 
 // global position
 Position global_pos;
@@ -94,7 +94,7 @@ void position_from_fen(const char* fen)
                 int ind = get_sq(row, col);
 
                 // write piece to board, including color
-                global_pos.board[ind] = black ? p + BLACK: p;
+                global_pos.board[ind] = black ? PieceCode(p + BCODE): p;
 
                 ++col; // move to next square
             }

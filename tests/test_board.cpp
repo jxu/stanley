@@ -1,5 +1,5 @@
 #include <assert.h>
-#include "board.h"
+#include "board.hpp"
 
 
 void test_board(void) 

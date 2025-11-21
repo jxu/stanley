@@ -1,5 +1,5 @@
-#include "common.h"
-#include "board.h"
+#include "common.hpp"
+#include "board.hpp"
 
 int main(void)
 {
