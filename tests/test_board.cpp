@@ -31,12 +31,12 @@ void test_board(void)
     // Starting board, by increasing row
     PieceCode BOARD[8][8] =
     {{ WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK},
-     { [0 ... 7] = WPAWN },
-     { [0 ... 7] = EMPTY },
-     { [0 ... 7] = EMPTY },
-     { [0 ... 7] = EMPTY },
-     { [0 ... 7] = EMPTY },
-     { [0 ... 7] = BPAWN },
+     { WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, },
+     { },
+     { },
+     { },
+     { },
+     { BPAWN, BPAWN,BPAWN,BPAWN,BPAWN,BPAWN,BPAWN,BPAWN,},
      {BROOK,BKNIGHT,BBISHOP,BQUEEN,BKING,BBISHOP,BKNIGHT,BROOK},
     };
 
