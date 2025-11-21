@@ -2,51 +2,26 @@
 #include "board.h"
 
 // Move encoding naively for now
-// If using 6-bit square index, then in 16 bits:  
-// 4-bit flags, 6-bit from, 6-bit to
 
-struct Move
+
+typedef struct
 {
-    Square from;
-    Square to;
-    uchar flags;
+    square from;
+    square to;
+    bool   capture;
+    PieceType  promotion;
+} Move;
 
-    Move(Square from, Square to, uchar flags = 0) :
-        from(from),
-        to(to),
-        flags(flags)
-    {};
+// Returns Move as value
+Move init_move(square from, square to, bool capture, PieceType promotion);
 
-    bool operator==(const Move& other) const
-    {
-        return (from == other.from) && (to == other.to) 
-            && (flags == other.flags);
-    }
-
-    // TODO: UCI coordinate notation output (and input?), like g7g8q
- 
-};
-
-// TODO: more efficient move list https://www.chessprogramming.org/Move_List
-typedef std::vector<Move> MoveList;
-
-// Generate pseudo-legal rook attacks
-// For each direction, iterate over squares until invalid
-inline MoveList generate_rook(Square from, Board board)
+static inline void write_square(char* buf, square sq)
 {
-    MoveList moves;
-    return moves;
+    buf[0] = sq_col(sq) - 'a';
+    buf[1] = sq_row(sq) - '1';
+
 }
 
-TEST_CASE("generate rook")
-{
-    Board empty_board;
-    empty_board.fill(EMPTY);
-
-    MoveList moves_a1 = generate_rook(0x00, empty_board);
-    MoveList moves_check = {Move(0x00, 0x01), Move(0x00, 0x02)};
-
-    CHECK(moves_a1 == moves_check);
-
-    
-}
+// Writes move in UCI algebraic notation to buffer
+// Returns # chars written
+int write_move(char* buf, Move move);
