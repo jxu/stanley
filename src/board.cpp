@@ -28,15 +28,12 @@
 
 #include "common.hpp"
 #include "board.hpp"
+#include <cstdio>
 
-// global position
-Position global_pos;
-
-void position_from_fen(const char* fen)
+Position::Position(const std::string& fen)
 {   
     // clear board
-    for (int i = 0; i < BOARD_SIZE; ++i)
-        global_pos.board[i] = EMPTY;
+    board.fill(EMPTY);
 
     // read entire FEN as six fields 
     // https://www.chessprogramming.org/Forsyth-Edwards_Notation
@@ -49,7 +46,7 @@ void position_from_fen(const char* fen)
 
     // https://en.cppreference.com/w/c/io/fscanf.html
     // scanning %s into buffer always writes NUL
-    int ret = sscanf(fen, "%s %c %s %s %d %d", 
+    int ret = std::sscanf(fen.c_str(), "%s %c %s %s %d %d", 
             place_buf, &side, castling, ep_target, &halfmove, &fullmove);
 
     if (ret != 6)
@@ -94,7 +91,7 @@ void position_from_fen(const char* fen)
                 int ind = get_sq(row, col);
 
                 // write piece to board, including color
-                global_pos.board[ind] = black ? PieceCode(p + BCODE): p;
+                board[ind] = black ? PieceCode(p + BCODE): p;
 
                 ++col; // move to next square
             }
@@ -114,15 +111,15 @@ void position_from_fen(const char* fen)
     // side to move: w or b
 
     if (side == 'w')
-        global_pos.black_to_move = false;
+        black_to_move = false;
     else if (side == 'b')
-        global_pos.black_to_move = true;
+        black_to_move = true;
     else
         ERROR("bad side to move\n");
 
     // castling rights (default none)
     // - or letters in KQkq
-    global_pos.castle_flags = 0;
+    castle_flags = 0;
 
     if (castling[0] != '-')
     {
@@ -130,10 +127,10 @@ void position_from_fen(const char* fen)
         {
             switch(castling[i])
             {
-                case 'K': global_pos.castle_flags |= CASTLE_WK; break; 
-                case 'Q': global_pos.castle_flags |= CASTLE_WQ; break;
-                case 'k': global_pos.castle_flags |= CASTLE_BK; break;
-                case 'q': global_pos.castle_flags |= CASTLE_BQ; break;
+                case 'K': castle_flags |= CASTLE_WK; break; 
+                case 'Q': castle_flags |= CASTLE_WQ; break;
+                case 'k': castle_flags |= CASTLE_BK; break;
+                case 'q': castle_flags |= CASTLE_BQ; break;
                 default: ERROR("bad castling flag");
             }
         }
@@ -142,16 +139,16 @@ void position_from_fen(const char* fen)
     // ep target
     if (ep_target[0] == '-')
     {
-        global_pos.ep_target = NO_EP_TARGET;
+        this->ep_target = NO_EP_TARGET;
     } 
     else
     {
-        global_pos.ep_target = sq_from_coord(ep_target);
-        int row = sq_row(global_pos.ep_target);
+        this->ep_target = sq_from_coord(ep_target);
+        int row = sq_row(this->ep_target);
         assert(row == 2 || row == 5); // only 3rd and 6th ranks
     }
 
-    global_pos.halfmove = halfmove;
-    global_pos.fullmove = fullmove;
+    this->halfmove = halfmove;
+    this->fullmove = fullmove;
 }
 

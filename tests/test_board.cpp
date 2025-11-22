@@ -26,7 +26,7 @@ void test_board(void)
     assert(sq_from_coord("h6") == 0x57);
 
     // Test FEN parsing
-    position_from_fen(START_FEN);
+    Position P(START_FEN);
 
     // Starting board, by increasing row
     PieceCode BOARD[8][8] =
@@ -44,24 +44,24 @@ void test_board(void)
     {
         for (int c = 0; c < 8; ++c)
         {
-            PieceCode p = global_pos.board[get_sq(r,c)];
+            PieceCode p = P.board[get_sq(r,c)];
             assert(p == BOARD[r][c]);
         }
     }
 
-    assert(global_pos.black_to_move == false);
+    assert(P.black_to_move == false);
 
     const uchar CASTLE_ALL = CASTLE_WK | CASTLE_WQ | CASTLE_BK | CASTLE_BQ;
-    assert(global_pos.castle_flags == CASTLE_ALL);
-    assert(global_pos.ep_target == NO_EP_TARGET);
-    assert(global_pos.halfmove == 0);
-    assert(global_pos.fullmove == 1);
+    assert(P.castle_flags == CASTLE_ALL);
+    assert(P.ep_target == NO_EP_TARGET);
+    assert(P.halfmove == 0);
+    assert(P.fullmove == 1);
 
     // Black to move position after 1. e4
     const char FEN1[] = 
         "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
     
-    position_from_fen(FEN1);
+    P = Position(FEN1);
     
     BOARD[1][4] = EMPTY;
     BOARD[3][4] = WPAWN;
@@ -70,14 +70,14 @@ void test_board(void)
     {
         for (int c = 0; c < 8; ++c)
         {
-            assert(global_pos.board[get_sq(r,c)] == BOARD[r][c]);
+            assert(P.board[get_sq(r,c)] == BOARD[r][c]);
         }
     }
-    assert(global_pos.black_to_move == true);
-    assert(global_pos.castle_flags == CASTLE_ALL);
-    assert(global_pos.ep_target == sq_from_coord("e3"));
-    assert(global_pos.halfmove == 0);
-    assert(global_pos.fullmove == 1);
+    assert(P.black_to_move == true);
+    assert(P.castle_flags == CASTLE_ALL);
+    assert(P.ep_target == sq_from_coord("e3"));
+    assert(P.halfmove == 0);
+    assert(P.fullmove == 1);
 
     printf("Test board passed\n");
 }
