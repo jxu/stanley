@@ -29,33 +29,26 @@
 #include "common.hpp"
 #include "board.hpp"
 #include <cstdio>
+#include <sstream>
 
 Position::Position(const std::string& fen)
-{   
-    // clear board
-    board.fill(EMPTY);
+{  
+    std::istringstream is(fen); // read like std::cin
 
     // read entire FEN as six fields 
     // https://www.chessprogramming.org/Forsyth-Edwards_Notation
-    char place_buf[128];
+    std::string place_buf;
     char side;
-    char castling[5]; // at most "KQkq\0"
-    char ep_target[3]; // at most "e3\0"
-    int  halfmove;
-    int  fullmove;
+    std::string castling;
+    std::string ep_target_str;
 
-    // https://en.cppreference.com/w/c/io/fscanf.html
-    // scanning %s into buffer always writes NUL
-    int ret = std::sscanf(fen.c_str(), "%s %c %s %s %d %d", 
-            place_buf, &side, castling, ep_target, &halfmove, &fullmove);
+    is >> place_buf;
+    // clear board
+    board.fill(EMPTY);
 
-    if (ret != 6)
-    {
-        ERROR("only read %d FEN fields\n", ret);
-    }
 
     // piece placement reads place ranks 8 through 1
-    char* s = place_buf;  // current char pointer
+    int i = 0;
     for (int row = 7; row >= 0; --row)
     {
         int col = 0;
@@ -63,7 +56,7 @@ Position::Position(const std::string& fen)
         while (col < 8)
         {
             // read character: digit or letter
-            char c = *s++;
+            char c = place_buf[i++];
 
             // digit of empty squares to skip
             if ('1' <= c && c <= '8')
@@ -102,13 +95,14 @@ Position::Position(const std::string& fen)
         // expect / separator (if not first rank)
         if (row > 0)
         {
-            assert(*s == '/');
-            ++s;
+            assert(place_buf[i] == '/');
+            ++i;
         }
     }
 
     // read remaining info
     // side to move: w or b
+    is >> side;
 
     if (side == 'w')
         black_to_move = false;
@@ -119,6 +113,7 @@ Position::Position(const std::string& fen)
 
     // castling rights (default none)
     // - or letters in KQkq
+    is >> castling;
     castle_flags = 0;
 
     if (castling[0] != '-')
@@ -137,18 +132,18 @@ Position::Position(const std::string& fen)
     }
 
     // ep target
-    if (ep_target[0] == '-')
+    is >> ep_target_str;
+    if (ep_target_str[0] == '-')
     {
-        this->ep_target = NO_EP_TARGET;
+        ep_target = NO_EP_TARGET;
     } 
     else
     {
-        this->ep_target = sq_from_coord(ep_target);
-        int row = sq_row(this->ep_target);
+        ep_target = sq_from_coord(ep_target_str);
+        int row = sq_row(ep_target);
         assert(row == 2 || row == 5); // only 3rd and 6th ranks
     }
 
-    this->halfmove = halfmove;
-    this->fullmove = fullmove;
+    is >> halfmove >> fullmove;
 }
 
