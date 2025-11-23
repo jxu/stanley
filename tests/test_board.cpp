@@ -1,61 +1,64 @@
-#include <assert.h>
+#include "doctest.h"
 #include "board.hpp"
 
-
-void test_board(void) 
+TEST_CASE("board")
 {
-    assert(get_color(WKING) == WHITE);
-    assert(get_color(BKNIGHT) == BLACK);
+    CHECK(get_color(WKING) == WHITE);
+    CHECK(get_color(BKNIGHT) == BLACK);
 
-    assert(get_sq(1, 2) == 0x12);
+    CHECK(get_sq(1, 2) == 0x12);
 
-    assert(is_sq(0x00));
-    assert(is_sq(0x77));
-    assert(!is_sq(0x80));
-    assert(!is_sq(-1)); // casts to square
+    CHECK(is_sq(0x00));
+    CHECK(is_sq(0x77));
+    CHECK(!is_sq(0x80));
+    CHECK(!is_sq(-1)); // casts to square
 
-    assert(sq_col(0x54) == 4);
-    assert(sq_row(0x54) == 5);
+    CHECK(sq_col(0x54) == 4);
+    CHECK(sq_row(0x54) == 5);
 
-    assert(!is_coord_valid(""));
-    assert(!is_coord_valid("a0"));
-    assert(!is_coord_valid("i2"));
-    assert(is_coord_valid("b2"));
+    CHECK(!is_coord_valid(""));
+    CHECK(!is_coord_valid("a0"));
+    CHECK(!is_coord_valid("i2"));
+    CHECK(is_coord_valid("b2"));
 
-    assert(sq_from_coord("a1") == 0x00);
-    assert(sq_from_coord("h6") == 0x57);
+    CHECK(sq_from_coord("a1") == 0x00);
+    CHECK(sq_from_coord("h6") == 0x57);
 
     // Test FEN parsing
     Position P(START_FEN);
 
     // Starting board, by increasing row
-    PieceCode BOARD[8][8] =
+    std::array<PieceCode, 8> EMPTY_ROW;
+    EMPTY_ROW.fill(EMPTY);
+    std::array<std::array<PieceCode, 8>, 8> BOARD = {
     {{ WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK},
      { WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, },
-     { },
-     { },
-     { },
-     { },
+     EMPTY_ROW,
+     EMPTY_ROW,
+     EMPTY_ROW,
+     EMPTY_ROW,
      { BPAWN, BPAWN,BPAWN,BPAWN,BPAWN,BPAWN,BPAWN,BPAWN,},
      {BROOK,BKNIGHT,BBISHOP,BQUEEN,BKING,BBISHOP,BKNIGHT,BROOK},
-    };
+    }};
+
+    std::array<std::array<PieceCode, 8>, 8> test_board;
 
     for (int r = 0; r < 8; ++r)
     {
         for (int c = 0; c < 8; ++c)
         {
-            PieceCode p = P.board[get_sq(r,c)];
-            assert(p == BOARD[r][c]);
+            test_board[r][c] = P.board[get_sq(r,c)];
         }
     }
+    CHECK(test_board == BOARD);
 
-    assert(P.black_to_move == false);
+    CHECK(P.black_to_move == false);
 
     const uchar CASTLE_ALL = CASTLE_WK | CASTLE_WQ | CASTLE_BK | CASTLE_BQ;
-    assert(P.castle_flags == CASTLE_ALL);
-    assert(P.ep_target == NO_EP_TARGET);
-    assert(P.halfmove == 0);
-    assert(P.fullmove == 1);
+    CHECK(P.castle_flags == CASTLE_ALL);
+    CHECK(P.ep_target == NO_EP_TARGET);
+    CHECK(P.halfmove == 0);
+    CHECK(P.fullmove == 1);
 
     // Black to move position after 1. e4
     const char FEN1[] = 
@@ -70,14 +73,14 @@ void test_board(void)
     {
         for (int c = 0; c < 8; ++c)
         {
-            assert(P.board[get_sq(r,c)] == BOARD[r][c]);
+            test_board[r][c] = P.board[get_sq(r,c)];
         }
     }
-    assert(P.black_to_move == true);
-    assert(P.castle_flags == CASTLE_ALL);
-    assert(P.ep_target == sq_from_coord("e3"));
-    assert(P.halfmove == 0);
-    assert(P.fullmove == 1);
 
-    printf("Test board passed\n");
+    CHECK(test_board == BOARD);
+    CHECK(P.black_to_move == true);
+    CHECK(P.castle_flags == CASTLE_ALL);
+    CHECK(P.ep_target == sq_from_coord("e3"));
+    CHECK(P.halfmove == 0);
+    CHECK(P.fullmove == 1);
 }
