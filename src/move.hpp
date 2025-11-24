@@ -1,27 +1,24 @@
-#include "common.hpp"
 #include "board.hpp"
 
 // Move encoding naively for now
+// https://www.chessprogramming.org/Encoding_Moves
 
-
-typedef struct
+class Move
 {
+public:
     square from;
     square to;
     bool   capture;
     PieceType  promotion;
-} Move;
 
-// Returns Move as value
-Move init_move(square from, square to, bool capture, PieceType promotion);
+    Move(square from, square to, bool capture=false, PieceType promotion=NIL) :
+    from(from),
+    to(to),
+    capture(capture),
+    promotion(promotion)
+    {}
 
-static inline void write_square(char* buf, square sq)
-{
-    buf[0] = sq_col(sq) - 'a';
-    buf[1] = sq_row(sq) - '1';
+    std::string to_string(void);
+};
 
-}
 
-// Writes move in UCI algebraic notation to buffer
-// Returns # chars written
-int write_move(char* buf, Move move);

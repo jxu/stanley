@@ -71,6 +71,15 @@ inline bool is_coord_valid(const std::string s)
             '1' <= s[1] && s[1] <= '8');
 }
 
+inline std::string write_sq(square s)
+{
+    assert(is_sq(s));
+    char file = 'a' + sq_col(s);
+    char rank = '1' + sq_row(s);
+    return std::string {file, rank};
+
+}
+
 inline square sq_from_coord(const std::string coord)
 {
     assert(is_coord_valid(coord));

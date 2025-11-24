@@ -1,13 +1,18 @@
 #include "move.hpp"
+#include "board.hpp"
 
-Move init_move(square from, square to, bool capture, PieceType promotion)
+std::string Move::to_string(void)
 {
-    Move move =
+    std::string s = write_sq(to) + write_sq(from);
+
+    switch (promotion)
     {
-        .from = from,
-        .to = to,
-        .capture = capture,
-        .promotion = promotion
-    };
-    return move;
+        case KNIGHT: s += 'n'; break;
+        case BISHOP: s += 'b'; break;
+        case ROOK:   s += 'r'; break;
+        case QUEEN:  s += 'q'; break;
+        default: break;
+    }
+
+    return s;
 }

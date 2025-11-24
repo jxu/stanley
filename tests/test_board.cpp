@@ -24,7 +24,11 @@ TEST_CASE("board")
     CHECK(sq_from_coord("a1") == 0x00);
     CHECK(sq_from_coord("h6") == 0x57);
 
-    // Test FEN parsing
+    CHECK(write_sq(0x34) == "e4");
+}
+
+TEST_CASE("FEN parsing")
+{
     Position P(START_FEN);
 
     // Starting board, by increasing row
