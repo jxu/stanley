@@ -11,14 +11,29 @@ public:
     bool   capture;
     PieceType  promotion;
 
-    Move(square from, square to, bool capture=false, PieceType promotion=NIL) :
+    Move(square from, square to) :
     from(from),
     to(to),
-    capture(capture),
-    promotion(promotion)
+    capture(false),
+    promotion(NIL)
     {}
 
-    std::string to_string(void);
+    // Write in UCI long algebraic notation
+    std::string to_string(void)
+    {
+        std::string s = write_sq(from) + write_sq(to);
+
+        switch (promotion)
+        {
+            case KNIGHT: s += 'n'; break;
+            case BISHOP: s += 'b'; break;
+            case ROOK:   s += 'r'; break;
+            case QUEEN:  s += 'q'; break;
+            default: break;
+        }
+
+        return s;
+    }
 };
 
 
