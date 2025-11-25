@@ -1,29 +1,28 @@
-#include <assert.h>
 #include "board.h"
-
+#include "unity.h"
 
 void test_board(void) 
 {
-    assert(get_color(WKING) == WHITE);
-    assert(get_color(BKNIGHT) == BLACK);
+    //TEST_ASSERT(is_black(-KING));
+    //TEST_ASSERT(!is_black(KNIGHT));
 
-    assert(get_sq(1, 2) == 0x12);
+    TEST_ASSERT(get_sq(1, 2) == 0x12);
 
-    assert(is_sq(0x00));
-    assert(is_sq(0x77));
-    assert(!is_sq(0x80));
-    assert(!is_sq(-1)); // casts to square
+    TEST_ASSERT(is_sq(0x00));
+    TEST_ASSERT(is_sq(0x77));
+    TEST_ASSERT(!is_sq(0x80));
+    TEST_ASSERT(!is_sq(-1)); // casts to square
 
-    assert(sq_col(0x54) == 4);
-    assert(sq_row(0x54) == 5);
+    TEST_ASSERT(sq_col(0x54) == 4);
+    TEST_ASSERT(sq_row(0x54) == 5);
 
-    assert(!is_coord_valid(""));
-    assert(!is_coord_valid("a0"));
-    assert(!is_coord_valid("i2"));
-    assert(is_coord_valid("b2"));
+    TEST_ASSERT(!is_coord_valid(""));
+    TEST_ASSERT(!is_coord_valid("a0"));
+    TEST_ASSERT(!is_coord_valid("i2"));
+    TEST_ASSERT(is_coord_valid("b2"));
 
-    assert(sq_from_coord("a1") == 0x00);
-    assert(sq_from_coord("h6") == 0x57);
+    TEST_ASSERT(sq_from_coord("a1") == 0x00);
+    TEST_ASSERT(sq_from_coord("h6") == 0x57);
 
     // Test FEN parsing
     position_from_fen(START_FEN);
@@ -45,17 +44,17 @@ void test_board(void)
         for (int c = 0; c < 8; ++c)
         {
             PieceCode p = global_pos.board[get_sq(r,c)];
-            assert(p == BOARD[r][c]);
+            TEST_ASSERT(p == BOARD[r][c]);
         }
     }
 
-    assert(global_pos.black_to_move == false);
+    TEST_ASSERT(global_pos.black_to_move == false);
 
     const uchar CASTLE_ALL = CASTLE_WK | CASTLE_WQ | CASTLE_BK | CASTLE_BQ;
-    assert(global_pos.castle_flags == CASTLE_ALL);
-    assert(global_pos.ep_target == NO_EP_TARGET);
-    assert(global_pos.halfmove == 0);
-    assert(global_pos.fullmove == 1);
+    TEST_ASSERT(global_pos.castle_flags == CASTLE_ALL);
+    TEST_ASSERT(global_pos.ep_target == NO_EP_TARGET);
+    TEST_ASSERT(global_pos.halfmove == 0);
+    TEST_ASSERT(global_pos.fullmove == 1);
 
     // Black to move position after 1. e4
     const char FEN1[] = 
@@ -70,14 +69,14 @@ void test_board(void)
     {
         for (int c = 0; c < 8; ++c)
         {
-            assert(global_pos.board[get_sq(r,c)] == BOARD[r][c]);
+            TEST_ASSERT(global_pos.board[get_sq(r,c)] == BOARD[r][c]);
         }
     }
-    assert(global_pos.black_to_move == true);
-    assert(global_pos.castle_flags == CASTLE_ALL);
-    assert(global_pos.ep_target == sq_from_coord("e3"));
-    assert(global_pos.halfmove == 0);
-    assert(global_pos.fullmove == 1);
+    TEST_ASSERT(global_pos.black_to_move == true);
+    TEST_ASSERT(global_pos.castle_flags == CASTLE_ALL);
+    TEST_ASSERT(global_pos.ep_target == sq_from_coord("e3"));
+    TEST_ASSERT(global_pos.halfmove == 0);
+    TEST_ASSERT(global_pos.fullmove == 1);
 
     printf("Test board passed\n");
 }

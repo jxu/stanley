@@ -8,6 +8,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 set(TEST_DIR "${CMAKE_SOURCE_DIR}/tests")
 
+# Include Unity
+add_library(unity "${TEST_DIR}/unity/unity.c")
+target_include_directories(unity PUBLIC tests/unity)
+
 include_directories(SRC_DIR)
 
 # Collect all source files
@@ -25,6 +29,7 @@ target_compile_options(app PRIVATE -O3 -Wall -Wextra)
 # Add executable for tests
 add_executable(test_app ${SRC_FILES} ${TEST_FILES})
 target_include_directories(test_app PRIVATE src tests)
+target_link_libraries(test_app PRIVATE unity)
 target_compile_options(test_app PRIVATE -Og -g -Wall -Wextra)
 
 
