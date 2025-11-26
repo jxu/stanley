@@ -49,6 +49,7 @@ enum Color
 // note EMPTY must be checked separately
 inline int get_color(PieceCode p) {return p & 8;}
 
+inline PieceType get_type(PieceCode p) {return PieceType(p & 7);}
 
 // 0x88 board size
 #define BOARD_SIZE 128

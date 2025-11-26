@@ -8,6 +8,9 @@ TEST_CASE("board")
 
     CHECK(get_sq(1, 2) == 0x12);
 
+    CHECK(get_type(WKING) == KING);
+    CHECK(get_type(BKNIGHT) == KNIGHT);
+
     CHECK(is_sq(0x00));
     CHECK(is_sq(0x77));
     CHECK(!is_sq(0x80));
