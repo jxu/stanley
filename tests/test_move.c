@@ -5,7 +5,25 @@
 void test_move(void)
 {
     char buf[10];
-    buf[9] = 0;
-    char* new_buf = write_coord(buf, sq_from_coord("e4"));
-    TEST_ASSERT(buf[0] == 'e' && buf[1] == '4');
+
+    Move move = 
+    {
+        .from = sq_from_coord("d2"),
+        .to = sq_from_coord("d4"),
+        .promotion = NIL
+    };
+
+    // overwrite buf with d2d4 move
+    write_move(buf, move);
+    TEST_ASSERT_EQUAL_STRING_LEN("d2d4", buf, 4);
+
+    Move move_promo = 
+    {
+        .from = sq_from_coord("e7"),
+        .to = sq_from_coord("e8"),
+        .promotion = QUEEN,
+    };
+
+    write_move(buf, move_promo);
+    TEST_ASSERT_EQUAL_STRING_LEN("e7e8q", buf, 5);
 }

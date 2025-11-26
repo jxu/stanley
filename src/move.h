@@ -21,8 +21,8 @@ static inline char* write_coord(char* buf, square sq)
     return buf + 2;
 }
 
-// Writes move in UCI algebraic notation to buffer with a space
-// Returns pointer to new end
+// Writes move in UCI algebraic notation to buffer
+// Returns pointer to new end (no space)
 static inline char* write_move(char* buf, Move move)
 {
     buf = write_coord(buf, move.from); 
@@ -30,14 +30,12 @@ static inline char* write_move(char* buf, Move move)
 
     switch (move.promotion)
     {
-        case KNIGHT: *buf++ = 'n';
+        case KNIGHT: *buf++ = 'n'; break;
         case BISHOP: *buf++ = 'b'; break;
         case ROOK:   *buf++ = 'r'; break;
         case QUEEN:  *buf++ = 'q'; break;
         default: ;
     }
    
-    *buf++ = ' '; // push space
-
     return buf;
 }
