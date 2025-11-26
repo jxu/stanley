@@ -1,27 +1,43 @@
-#include "common.h"
+#pragma once
 #include "board.h"
 
 // Move encoding naively for now
-
 
 typedef struct
 {
     square from;
     square to;
-    bool   capture;
     PieceType  promotion;
 } Move;
 
-// Returns Move as value
-Move init_move(square from, square to, bool capture, PieceType promotion);
+// Init with struct initializers list
 
-static inline void write_square(char* buf, square sq)
+// Write 2 chars of square coord and returns new pointer
+static inline char* write_coord(char* buf, square sq)
 {
-    buf[0] = sq_col(sq) - 'a';
-    buf[1] = sq_row(sq) - '1';
-
+    assert(is_sq(sq));
+    buf[0] = sq_col(sq) + 'a';
+    buf[1] = sq_row(sq) + '1';
+    return buf + 2;
 }
 
-// Writes move in UCI algebraic notation to buffer
-// Returns # chars written
-int write_move(char* buf, Move move);
+// Writes move in UCI algebraic notation to buffer with a space
+// Returns pointer to new end
+static inline char* write_move(char* buf, Move move)
+{
+    buf = write_coord(buf, move.from); 
+    buf = write_coord(buf, move.to);
+
+    switch (move.promotion)
+    {
+        case KNIGHT: *buf++ = 'n';
+        case BISHOP: *buf++ = 'b'; break;
+        case ROOK:   *buf++ = 'r'; break;
+        case QUEEN:  *buf++ = 'q'; break;
+        default: ;
+    }
+   
+    *buf++ = ' '; // push space
+
+    return buf;
+}
