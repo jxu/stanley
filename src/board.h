@@ -47,6 +47,7 @@ typedef enum
 // note EMPTY must be checked separately
 static inline int get_color(PieceCode p) {return p & 8;}
 
+static inline PieceType get_type(PieceCode p) {return p & 7;}
 
 // 0x88 board size
 #define BOARD_SIZE 128

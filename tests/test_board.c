@@ -3,8 +3,11 @@
 
 void test_board(void) 
 {
-    //TEST_ASSERT(is_black(-KING));
-    //TEST_ASSERT(!is_black(KNIGHT));
+    TEST_ASSERT(get_color(BKING) == BLACK);
+    TEST_ASSERT(get_color(WKNIGHT) == WHITE);
+
+    TEST_ASSERT(get_type(BKING) == KING);
+    TEST_ASSERT(get_type(WKNIGHT) == KNIGHT);
 
     TEST_ASSERT(get_sq(1, 2) == 0x12);
 
@@ -23,7 +26,10 @@ void test_board(void)
 
     TEST_ASSERT(sq_from_coord("a1") == 0x00);
     TEST_ASSERT(sq_from_coord("h6") == 0x57);
+}
 
+void test_fen(void) 
+{
     // Test FEN parsing
     position_from_fen(START_FEN);
 
@@ -77,6 +83,4 @@ void test_board(void)
     TEST_ASSERT(global_pos.ep_target == sq_from_coord("e3"));
     TEST_ASSERT(global_pos.halfmove == 0);
     TEST_ASSERT(global_pos.fullmove == 1);
-
-    printf("Test board passed\n");
 }
