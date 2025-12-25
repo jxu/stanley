@@ -61,7 +61,7 @@ TEST_CASE("FEN parsing")
 
     CHECK(P.black_to_move == false);
 
-    const uchar CASTLE_ALL = CASTLE_WK | CASTLE_WQ | CASTLE_BK | CASTLE_BQ;
+    const uint8_t CASTLE_ALL = CASTLE_WK | CASTLE_WQ | CASTLE_BK | CASTLE_BQ;
     CHECK(P.castle_flags == CASTLE_ALL);
     CHECK(P.ep_target == NO_EP_TARGET);
     CHECK(P.halfmove == 0);
