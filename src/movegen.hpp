@@ -1,4 +1,5 @@
 #include "move.hpp"
+#include "position.hpp"
 #include <vector>
 
 enum Direction
