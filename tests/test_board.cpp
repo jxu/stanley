@@ -1,10 +1,15 @@
 #include "doctest.h"
 #include "board.hpp"
 
-TEST_CASE("board")
+TEST_CASE("board functions")
 {
     CHECK(get_color(WKING) == WHITE);
     CHECK(get_color(BKNIGHT) == BLACK);
+    CHECK(get_color(EMPTY) == NEUTRAL);
+
+    CHECK(invert_color(WHITE) == BLACK);
+
+    CHECK(invert_piece(WKING) == BKING);
 
     CHECK(get_sq(1, 2) == 0x12);
 

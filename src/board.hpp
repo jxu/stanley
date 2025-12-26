@@ -29,12 +29,11 @@
 #pragma once
 
 #include <cassert>
-#include <array>
 #include <string>
 #include <cstdint>
 
 // slight type abstraction for 0x88 index
-typedef uint8_t square;
+typedef int8_t square;
 
 // Chess piece, independent of color
 enum PieceType : int8_t
@@ -48,7 +47,7 @@ enum PieceType : int8_t
     KING    = 6,
 };
 
-// Piece with color: type (3 bits) and color (1 bit)
+// Piece with color encoded as sign. 0 means "empty" piece
 enum PieceCode : int8_t
 {
     EMPTY   = NIL,
@@ -59,40 +58,50 @@ enum PieceCode : int8_t
     WQUEEN  = QUEEN,
     WKING   = KING,
 
-    BCODE   = 8,
-    BPAWN   = BCODE + PAWN,
-    BKNIGHT = BCODE + KNIGHT,
-    BBISHOP = BCODE + BISHOP,
-    BROOK   = BCODE + ROOK,
-    BQUEEN  = BCODE + QUEEN,
-    BKING   = BCODE + KING,
+    BPAWN   = -PAWN,
+    BKNIGHT = -KNIGHT,
+    BBISHOP = -BISHOP,
+    BROOK   = -ROOK,
+    BQUEEN  = -QUEEN,
+    BKING   = -KING,
 };
 
-enum Color
+enum Color : int
 {
-    WHITE,
-    BLACK,
-    NEUTRAL, // for EMPTY/BCODE
+    WHITE = 1,
+    BLACK = -1,
+    NEUTRAL = 0,
 };
 
-
-// note EMPTY must be checked separately
+// considers EMPTY to be NEUTRAL
 inline Color get_color(PieceCode p)
 {
-    if ((p & 7) == 0) return NEUTRAL;
-    if (p < BCODE) return WHITE;
-    return BLACK;
+    if (p > 0) return WHITE;
+    if (p < 0) return BLACK;
+    return NEUTRAL;
+}
+
+inline Color invert_color(Color c)
+{
+    assert(c != NEUTRAL);
+    return Color(-c);
+}
+
+inline PieceCode invert_piece(PieceCode p)
+{
+    assert(p != EMPTY);
+    return PieceCode(-p);
 }
 
 inline PieceType get_type(PieceCode p)
 {
-    return PieceType(p & 7);
+    return PieceType(std::abs(p));
 }
 
 // 0x88 board size
 constexpr size_t BOARD_SIZE = 128;
 
-enum SquareConst : uint8_t
+enum SquareConst : int8_t
 {
     // enum will increment each unspecified value
     A1 = 0x00, B1, C1, D1, E1, F1, G1, H1,
@@ -158,13 +167,5 @@ inline square sq_from_coord(const std::string coord)
     return get_sq(row, col);
 }
 
-// used to index into a castling nibble
-enum castling_flags
-{
-    CASTLE_WK = 1,
-    CASTLE_WQ = 2,
-    CASTLE_BK = 4,
-    CASTLE_BQ = 8,
-};
 
 

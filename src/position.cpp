@@ -56,7 +56,9 @@ Position::Position(const std::string& fen)
                 int ind = get_sq(row, col);
 
                 // write piece to board, including color
-                board[ind] = black ? PieceCode(p + BCODE): p;
+                if (black)
+                    p = invert_piece(p);
+                board[ind] = p;
 
                 ++col; // move to next square
             }
