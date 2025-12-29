@@ -84,18 +84,18 @@ inline Color get_color(PieceCode p)
 inline Color invert_color(Color c)
 {
     assert(c != NEUTRAL);
-    return Color(-c);
+    return static_cast<Color>(-c);
 }
 
 inline PieceCode invert_piece(PieceCode p)
 {
     assert(p != EMPTY);
-    return PieceCode(-p);
+    return static_cast<PieceCode>(-p);
 }
 
 inline PieceType get_type(PieceCode p)
 {
-    return PieceType(std::abs(p));
+    return static_cast<PieceType>(std::abs(p));
 }
 
 // 0x88 board size
