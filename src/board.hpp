@@ -121,7 +121,7 @@ enum SquareConst : int8_t
 // cols 0-7 encodes files a-h
 
 // is value a valid 0x88 board square
-inline bool is_sq(square s)
+inline bool is_valid(square s)
 {
     return (s & 0x88) == 0;
 }
@@ -152,7 +152,7 @@ inline bool is_coord_valid(const std::string s)
 
 inline std::string write_sq(square s)
 {
-    assert(is_sq(s));
+    assert(is_valid(s));
     char file = 'a' + sq_col(s);
     char rank = '1' + sq_row(s);
     return std::string {file, rank};

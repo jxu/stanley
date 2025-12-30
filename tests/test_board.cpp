@@ -16,10 +16,10 @@ TEST_CASE("board functions")
     CHECK(get_type(WKING) == KING);
     CHECK(get_type(BKNIGHT) == KNIGHT);
 
-    CHECK(is_sq(0x00));
-    CHECK(is_sq(0x77));
-    CHECK(!is_sq(0x80));
-    CHECK(!is_sq(-1)); // casts to square
+    CHECK(is_valid(0x00));
+    CHECK(is_valid(0x77));
+    CHECK(!is_valid(0x80));
+    CHECK(!is_valid(-1)); // casts to square
 
     CHECK(sq_col(0x54) == 4);
     CHECK(sq_row(0x54) == 5);
