@@ -26,7 +26,6 @@
 
 */
 
-#include "common.hpp"
 #include "board.hpp"
 #include <cstdio>
 #include <sstream>
@@ -78,7 +77,7 @@ Position::Position(const std::string& fen)
                     case 'K': p = WKING; break;
                         
                     default:
-                        ERROR("unrecognized piece %c\n", c);
+                        assert(0);
                 }
 
                 int ind = get_sq(row, col);
@@ -109,7 +108,7 @@ Position::Position(const std::string& fen)
     else if (side == 'b')
         black_to_move = true;
     else
-        ERROR("bad side to move\n");
+        assert(0);
 
     // castling rights (default none)
     // - or letters in KQkq
@@ -126,7 +125,7 @@ Position::Position(const std::string& fen)
                 case 'Q': castle_flags |= CASTLE_WQ; break;
                 case 'k': castle_flags |= CASTLE_BK; break;
                 case 'q': castle_flags |= CASTLE_BQ; break;
-                default: ERROR("bad castling flag");
+                default: assert(0);
             }
         }
     }

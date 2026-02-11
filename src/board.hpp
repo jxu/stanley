@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common.hpp"
 #include <array>
 #include <string>
+#include <cassert>
 
 // slight type abstraction
 typedef unsigned char square;
@@ -104,7 +104,7 @@ class Position
 public:
     std::array<PieceCode, BOARD_SIZE> board;
     bool black_to_move;
-    uchar castle_flags;
+    unsigned char castle_flags;
     square ep_target; // 0xFF to store none
     int halfmove;
     int fullmove;
