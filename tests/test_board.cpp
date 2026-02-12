@@ -11,13 +11,13 @@ TEST_CASE("board")
     CHECK(get_type(WKING) == KING);
     CHECK(get_type(BKNIGHT) == KNIGHT);
 
-    CHECK(is_sq(0x00));
-    CHECK(is_sq(0x77));
-    CHECK(!is_sq(0x80));
-    CHECK(!is_sq(-1)); // casts to square
+    CHECK(is_sq(square(0x00)));
+    CHECK(is_sq(square(0x77)));
+    CHECK(!is_sq(square(0x80)));
+    CHECK(!is_sq(square(-1))); // casts to square
 
-    CHECK(sq_col(0x54) == 4);
-    CHECK(sq_row(0x54) == 5);
+    CHECK(sq_col(square(0x54)) == 4);
+    CHECK(sq_row(square(0x54)) == 5);
 
     CHECK(!is_coord_valid(""));
     CHECK(!is_coord_valid("a0"));
@@ -27,7 +27,7 @@ TEST_CASE("board")
     CHECK(sq_from_coord("a1") == 0x00);
     CHECK(sq_from_coord("h6") == 0x57);
 
-    CHECK(write_sq(0x34) == "e4");
+    CHECK(write_sq(E4) == "e4");
 }
 
 TEST_CASE("FEN parsing")
@@ -63,7 +63,7 @@ TEST_CASE("FEN parsing")
 
     const auto CASTLE_ALL = CASTLE_WK | CASTLE_WQ | CASTLE_BK | CASTLE_BQ;
     CHECK(P.castle_flags == CASTLE_ALL);
-    CHECK(P.ep_target == NO_EP_TARGET);
+    CHECK(P.ep_target == NO_SQUARE);
     CHECK(P.halfmove == 0);
     CHECK(P.fullmove == 1);
 
