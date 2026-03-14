@@ -4,7 +4,7 @@
 
 TEST_CASE("move")
 {
-    auto move_e4 = Move(0x14, 0x34);
+    auto move_e4 = Move(E2, E4);
     CHECK(move_e4.from == sq_from_coord("e2"));
     CHECK(move_e4.to == sq_from_coord("e4"));
     CHECK(move_e4.to_string() == "e2e4");
