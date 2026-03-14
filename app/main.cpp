@@ -1,4 +1,4 @@
-#include "board.hpp"
+#include "../src/board.hpp"
 
 int main(void)
 {

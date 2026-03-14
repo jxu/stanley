@@ -1,30 +1,35 @@
 cmake_minimum_required(VERSION 3.15)
-project(cchess CXX)
+project(cppchess CXX)
 
-# Export compiler commands for clangd
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 17)
 
-# Set source and test directories
-set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
-set(TEST_DIR "${CMAKE_SOURCE_DIR}/tests")
+# Define main chess functionality as library
+add_library(chesslib
+        src/board.cpp
+        src/move.cpp
+        src/movegen.cpp
+)
 
-include_directories(SRC_DIR)
+# Include header files
+target_include_directories(chesslib PUBLIC src)
 
-# Collect all source files
-file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
-file(GLOB TEST_FILES "${TEST_DIR}/*.cpp")
+# Different builds: Release and Debug
+# Debug uses _GLIBCXX_DEBUG which changes all standard class templates
+# https://gcc.gnu.org/onlinedocs/libstdc++/manual/debug_mode_using.html
+# Debug mode must be applied for all compilation and linking
+target_compile_options(chesslib PRIVATE
+        $<$<CONFIG:Release>:-O3>
+        $<$<CONFIG:Debug>:-Og -g -D_GLIBCXX_DEBUG>
+)
 
-# Separate main.c from other sources
-set(MAIN_FILE "${SRC_DIR}/main.cpp")
-list(REMOVE_ITEM SRC_FILES ${MAIN_FILE})
+target_link_options(chesslib PRIVATE
+        $<$<CONFIG:Debug>:-D_GLIBCXX_DEBUG>
+)
 
-# Add executable for main application
-add_executable(app ${MAIN_FILE} ${SRC_FILES})
-target_compile_options(app PRIVATE -O3 -Wall -Wextra)
+# Main executable: links in my library
+add_executable(chess app/main.cpp)
+target_link_libraries(chess PRIVATE chesslib)
 
-# Add executable for tests
-add_executable(test_app ${SRC_FILES} ${TEST_FILES})
-target_include_directories(test_app PRIVATE src tests)
-target_compile_options(test_app PRIVATE -Og -g -Wall -Wextra)
-
-
+# Enable CTest (see tests/CMakeLists.txt)
+enable_testing()
+add_subdirectory(tests)
